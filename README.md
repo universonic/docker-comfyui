@@ -1,4 +1,4 @@
-# ComfyUI dockerfile
+# ComfyUI
 The most powerful and modular stable diffusion GUI and backend. This repository is for NVIDIA GPUs only.
 
 For detailed command-line flags, see [Official instructions](https://github.com/comfyanonymous/ComfyUI).
