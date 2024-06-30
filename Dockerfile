@@ -17,7 +17,7 @@ WORKDIR /app
 RUN git clone https://github.com/comfyanonymous/ComfyUI.git comfyui && \
     cd comfyui && \
     python3 -m venv venv && \
-    source venv/bin/activate && \
+    . venv/bin/activate && \
     pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu121 && \
     pip install -r requirements.txt
 
