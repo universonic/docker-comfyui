@@ -27,5 +27,5 @@ VOLUME /app/input
 
 EXPOSE 8188
 
-ENTRYPOINT ["/app/entrypoint.sh", "--listen", "0.0.0.0", "--port", "8188", "--preview-method", "auto"]
+ENTRYPOINT ["/app/entrypoint.sh", "--listen", "0.0.0.0", "--port", "8188", "--preview-method", "auto", "--output-directory", "/app/output", "--temp-directory", "/app/temp", "--input-directory", "/app/input"]
 
