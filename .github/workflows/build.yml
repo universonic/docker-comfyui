@@ -49,7 +49,7 @@ jobs:
 
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
-      - name: Extract Docker metadata (minimal)
+      - name: Extract Docker metadata
         id: minimal_build
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
@@ -58,23 +58,11 @@ jobs:
             type=schedule,pattern=nightly-{{date 'YYYYMMDDhhmmss'}}
             type=schedule,pattern=latest
             type=sha,format=short
-            type=raw,value=minimal
-
-      # Extract metadata (tags, labels) for Docker
-      # https://github.com/docker/metadata-action
-      - name: Extract Docker metadata (full)
-        id: full_build
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=schedule,pattern=nightly-{{date 'YYYYMMDDhhmmss'}}-full
-            type=raw,value=full
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
-      - name: Build and push Docker image (minimal)
-        id: build-and-push-minimal
+      - name: Build and push Docker image
+        id: build-and-push
         uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
         with:
           context: .
@@ -83,17 +71,4 @@ jobs:
           labels: ${{ steps.minimal_build.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          target: minimal
 
-      # Build and push Docker image with Buildx (don't push on PR)
-      # https://github.com/docker/build-push-action
-      - name: Build and push Docker image (full)
-        id: build-and-push-full
-        uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
-        with:
-          context: .
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.full_build.outputs.tags }}
-          labels: ${{ steps.full_build.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
