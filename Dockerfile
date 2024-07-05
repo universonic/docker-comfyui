@@ -14,18 +14,40 @@ RUN apt update && \
 USER comfyui
 WORKDIR /app
 
-RUN git clone https://github.com/comfyanonymous/ComfyUI.git comfyui && \
-    cd comfyui && \
-    python3 -m venv venv && \
+RUN git clone https://github.com/comfyanonymous/ComfyUI.git comfyui
+
+WORKDIR /app/comfyui
+
+
+FROM minimal as nvidia
+
+RUN python3 -m venv venv && \
     . venv/bin/activate && \
     pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu121 && \
     pip install -r requirements.txt
 
-VOLUME /app/output
-VOLUME /app/temp
-VOLUME /app/input
+RUN . venv/bin/activate && \
+    pip install comfy-cli && \
+    comfy install
+
+VOLUME /app/comfyui/output
+VOLUME /app/comfyui/input
+VOLUME /app/comfyui/models/checkpoints
+VOLUME /app/comfyui/models/clip
+VOLUME /app/comfyui/models/clip_vision
+VOLUME /app/comfyui/models/controlnet
+VOLUME /app/comfyui/models/diffusers
+VOLUME /app/comfyui/models/embeddings
+VOLUME /app/comfyui/models/gligen
+VOLUME /app/comfyui/models/hypernetworks
+VOLUME /app/comfyui/models/loras
+VOLUME /app/comfyui/models/photomaker
+VOLUME /app/comfyui/models/style_models
+VOLUME /app/comfyui/models/unet
+VOLUME /app/comfyui/models/upscale_models
+VOLUME /app/comfyui/models/vae
+VOLUME /app/comfyui/models/vae_approx
 
 EXPOSE 8188
 
-ENTRYPOINT ["/app/entrypoint.sh", "--listen", "0.0.0.0", "--port", "8188", "--preview-method", "auto", "--output-directory", "/app/output", "--temp-directory", "/app/temp", "--input-directory", "/app/input"]
-
+ENTRYPOINT ["/app/entrypoint.sh", "--listen", "0.0.0.0", "--port", "8188", "--preview-method", "auto"]
