@@ -26,10 +26,6 @@ RUN python3 -m venv venv && \
     pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu121 && \
     pip install -r requirements.txt
 
-RUN . venv/bin/activate && \
-    pip install comfy-cli && \
-    comfy install
-
 VOLUME /app/comfyui/output
 VOLUME /app/comfyui/input
 VOLUME /app/comfyui/models/checkpoints
